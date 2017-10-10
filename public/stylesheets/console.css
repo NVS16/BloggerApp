@@ -1,0 +1,63 @@
+body {
+  font-family: 'Comfortaa', cursive;
+  text-align: center;
+}
+
+.view {
+    margin: 8%;
+  }
+
+nav button {
+  background: transparent !important;
+  border: 1px solid #888;
+}
+
+nav a {
+  color: #fff !important;
+  text-shadow: 1px 1px 8px #888;
+  background: transparent;
+}
+
+
+.navbar {
+  background: #00aced;
+}
+
+.navbar li:hover a{
+  text-decoration: underline;
+}
+
+
+.navbar-brand {
+  font-family: 'Righteous', cursive;
+  font-size: 3em;  
+  margin-top: 6%;
+}
+
+.form {
+  margin-bottom: 5%;
+  border: 1px solid black !important;
+}
+
+.form-heading {
+  margin: 5% !important;
+  font-size: 1.5em;
+}
+
+.form-link {
+  margin: 2%;
+  float: right;
+}
+
+.content {
+  border: 1px solid black;
+}
+
+label {
+  font-size: .8em;
+  color: red;
+}
+
+
+
+

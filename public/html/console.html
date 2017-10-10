@@ -1,0 +1,74 @@
+<link href='../stylesheets/console.css' rel='stylesheet' type='text/css'>
+
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
+                    <i class="fa fa-bars"></i>                       
+                </button>
+                <a class="navbar-brand" href="#">Blogger</a>
+            </div>
+            <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
+            <ul class="nav navbar-nav navbar-right">
+                <div class="navbar-form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Email" ng-model="login.email">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="login.password">       
+                    </div>
+                    <button class="btn btn-info" ng-click="Login()">LogIn</button><br>
+                    <span class="form-link" ><a href="#">Forgot Password?</a></span>
+                </div>
+            </ul>
+            </div>
+        </div>
+    </nav>  
+
+    <div class="view">
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                <div class="content">
+                    <h1>{{title}}</h1>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <div class="form col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-heading">SignUp <label>{{ alerts.success }}</label></div>
+                    <div class="form-group">
+                            <label>{{ alerts.name }}</label>
+                        <input type="text"  ng-focus="eraseAlert('name')" class="form-control" placeholder="Full Name" ng-model="signup.name">        
+                    </div>
+                    <div class="form-group">
+                        <label>{{ alerts.email }}</label>
+                        <input type="email" ng-focus="eraseAlert('email')" class="form-control" placeholder="Email" ng-model="signup.email">        
+                    </div>
+                    <div class="form-group">
+                        <label>{{ alerts.contact }}</label>
+                        <input type="text" ng-focus="eraseAlert('contact')" class="form-control" placeholder="Contact" ng-model="signup.contact">        
+                    </div>
+                    <div class="form-group">
+                        <label>{{ alerts.dob }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">D.O.B</span>
+                            <input type="date" ng-focus="eraseAlert('dob')" class="form-control" placeholder="DOB" ng-model="signup.dob">
+                        </div>        
+                    </div>
+                    <div class="form-group">
+                        <label>{{ alerts.password }}</label>
+                        <input type="password"  ng-focus="eraseAlert('password')" class="form-control" placeholder="Password" ng-model="signup.password">        
+                    </div>
+                    <div class="form-group">
+                        <label>{{ alerts.passwordConfirm }}</label>
+                        <input type="password" ng-focus="eraseAlert('passwordConfirm')" class="form-control" placeholder="Confirm Password" ng-model="signup.passwordConfirm">        
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-info" ng-click="Signup()">SignUp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,40 @@
+body {
+    font-family: 'Comfortaa', cursive;
+    text-align: center;
+  }
+  
+  a {
+    color: #fff !important;
+    text-shadow: 1px 1px 8px #888;
+  }
+  
+  .navbar {
+    background: #00aced;
+  }
+  
+  .navbar li:hover {
+    background: #0084b4 !important;
+    color: #fff;
+  }
+  
+  .dropdown a{
+    background: transparent !important;
+  }
+
+  .dropdown-menu a{
+    color: #000 !important;
+  }
+
+  .dropdown-menu li:hover {
+    background: #0084b4 !important;
+}
+  
+  .navbar-brand {
+    font-family: 'Righteous', cursive;
+    font-size: 1.8em;  
+  }
+  
+  
+  
+  
+  

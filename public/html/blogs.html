@@ -1,0 +1,62 @@
+<link rel="stylesheet" type="text/css" href="../stylesheets/blogs.css">
+<link rel="stylesheet" type="text/css" href="../stylesheets/dashboard.css">
+ 
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
+                <i class="fa fa-bars"></i>                       
+            </button>
+            <a class="navbar-brand" href="#">Blogger</a>
+        </div>
+        <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#!dashboard/home">Home</a></li>
+            <li><a href="#!dashboard/blogs">Blogs</a></li>
+            <li class="dropdown" uib-dropdown>
+                <a href id="simple-dropdown" uib-dropdown-toggle>
+                    Nvs <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+                    <li>
+                        <a href><i class="fa fa-user"></i>&nbsp;&nbsp;&nbsp;Account</a>
+                    </li>
+                    <li>
+                        <a href><i class="fa fa-sign-out"></i>&nbsp;&nbsp;&nbsp;Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        </div>
+    </div>
+</nav> 
+
+
+
+<div class="blogPanels">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="blog">
+            <div class="blog-heading">
+                <input class="form-control" placeholder="Blog Name" ng-model="newBlog.name">
+            </div>
+            <div class="blog-body">
+                <textarea class="form-control" rows="3" placeholder="Brief Description" ng-model="newBlog.description"></textarea>
+                <button class="btn btn-info" id="submit" ng-click="submitBlog()">ADD BLOG</button>
+            </div>
+        </div>
+    </div>
+    <div ng-repeat="blog in blogs" class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="blog" ng-click="viewBlog(blog._id)">
+            <div class="blog-heading">
+                {{ blog.name }}
+            </div>
+            <div class="blog-body">
+                <ul>
+                    <li>
+                        <p>{{ blog.description }}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

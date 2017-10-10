@@ -1,0 +1,48 @@
+.blogPanels {
+    margin-top: 8%;
+}
+.blog {
+    box-shadow: 1px 1px 5px #888;
+    height: 200px;
+    overflow-y: auto;
+    cursor: pointer;
+    margin-bottom: 50px;
+}
+
+.blog:hover {
+    box-shadow: 2px 2px 5px #888;
+}
+
+.blog-heading {
+    font-size: 2em;
+    padding: 10px;  
+    text-transform: uppercase;
+    background: #0084b4;
+    color: #fff;
+    text-shadow: 1px 1px 1px #444;
+    font-family: 'Righteous', cursive;
+}
+
+.blog-body {
+    margin: 10px;
+}
+
+.blog-body ul li{
+    list-style-type: none;
+    overflow: auto;
+    padding-top: 20px;
+}
+
+.blog-body ul li p {
+    font-size: 20px;
+    width: 300px;
+    height: 70px;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+}
+
+#submit {
+    border-radius: 0px;
+    box-shadow: 1px 1px 5px #888;
+    margin-top: 3%;
+}

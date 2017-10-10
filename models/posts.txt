@@ -1,0 +1,15 @@
+[
+    {
+        _id: ObjectId("56955ca46063c5600627f392"),
+        reviews: ObjectId("59d8ba076d7c3a651eebb2eb"),
+        title: "Ten Food Items For Gym",
+        body: "Consectetur in aliqua aute ea eiusmod proident voluptate elit nulla.Ad aliquip in eu occaecat pariatur. Deserunt et qui nisi quis cupidatat in eiusmod do aliquip cillum esse minim. Minim laboris incididunt quis pariatur minim Lorem fugiat consectetur. Nostrud mollit officia sint et est dolor Lorem fugiat. Officia duis id aute Lorem ea labore adipisicing eu aliqua.",
+        
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439011"),
+        reviews: ObjectId("59d8ba076d7c3a651eebb2ec"),
+        title: "Morning Diet Tips",
+        body: "Consectetur in aliqua aute ea eiusmod proident voluptate elit nulla.Ad aliquip in eu occaecat pariatur. Deserunt et qui nisi quis cupidatat in eiusmod do aliquip cillum esse minim. Minim laboris incididunt quis pariatur minim Lorem fugiat consectetur. Nostrud mollit officia sint et est dolor Lorem fugiat. Officia duis id aute Lorem ea labore adipisicing eu aliqua.",
+    }
+]

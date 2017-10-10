@@ -1,0 +1,16 @@
+[
+    {
+        "_id" : ObjectId("59d8b7776d7c3a651eebb2e8"),
+        "name" : "NVS ABHISHEK",
+        "contact" : 7894043399,
+        "dob" : "2017-10-12T18:30:00.000Z",
+        "email" : "nvs@mail.com",
+        "password" : "$2a$10$8xiKG2DB5WYy9gUvY1Z1DeOyZlPptn8B4hyVgjYvvu8/yl7c1Pv9e",
+        "blogs" : [
+                ObjectId("56955ca46063c5600627f393"),
+                ObjectId("59d8c6197b57c739cb8d6549"),
+                ObjectId("59da05cb9740162c2c39c837")
+        ],
+        "__v" : 0
+    }
+]

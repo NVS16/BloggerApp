@@ -1,0 +1,11 @@
+[
+    {
+        _id: ObjectId("56955ca46063c5600627f393"),
+        posts: [
+            ObjectId("56955ca46063c5600627f392"),
+            ObjectId("507f1f77bcf86cd799439011")
+        ],
+        name: "Food Habits",
+        description: "A blog on healthy food habits."
+    }
+]

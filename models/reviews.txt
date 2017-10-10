@@ -1,0 +1,36 @@
+[
+    {       
+            "_id" : ObjectId("59d8ba076d7c3a651eebb2eb"), 
+            "views" : [                ObjectId("59d8b7776d7c3a651eebb2e8")        ],
+            "comments" : [
+                {
+                        "userDetails" : ObjectId("59d8b7776d7c3a651eebb2e8"),
+                        "comment" : "Very nice blog"
+                }
+            ],
+            "votes" : [
+                {
+                        "userDetails" : ObjectId("59d8b7776d7c3a651eebb2e8"),
+                        "vote" : "upvote"
+                }
+            ]
+    },
+    {
+        "_id" : ObjectId("59d8ba076d7c3a651eebb2ec"),
+        "views" : [
+                ObjectId("59d8b7776d7c3a651eebb2e8")
+        ],
+        "comments" : [
+                {
+                        "userDetails" : ObjectId("59d8b7776d7c3a651eebb2e8"),
+                        "comment" : "Very good keep it up"
+                }
+        ],
+        "votes" : [
+                {
+                        "userDetails" : ObjectId("59d8b7776d7c3a651eebb2e8"),
+                        "vote" : "downvote"
+                }
+        ]
+    }
+]
