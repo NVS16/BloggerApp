@@ -76,6 +76,13 @@ app.controller('consoleController', function($scope, $http) {
 app.controller('homeController', function ($scope) {
     $scope.title = "Home";
     $scope.isNavCollapsed = true;
+
+    $scope.logOut = function() {
+        $http.get('/logout').then(function(res) {
+            console.log(res);
+            location.href = "#!console";
+        });
+    };
 });
 
 app.controller('blogsController', function ($http, $scope) {
@@ -87,6 +94,8 @@ app.controller('blogsController', function ($http, $scope) {
 
     $http.get('/blogs').then(function (res) {
         console.log(res);
+        if(!res.data)
+            location.href = "#!console";
         $scope.blogs = res.data.blogs;
     });
 
@@ -105,6 +114,13 @@ app.controller('blogsController', function ($http, $scope) {
             id: id
         }).then(function (res) {
             console.log(res);
+        });
+    };
+
+    $scope.logOut = function() {
+        $http.get('/logout').then(function(res) {
+            console.log(res);
+            location.href = "#!console";
         });
     };
 });
@@ -142,14 +158,36 @@ app.controller('postsController', function ($scope, $http) {
 
     $scope.vote = function(vote) {
         $http.post('/vote', { id: $scope.currentPost.reviews._id, vote: vote }).then(function(res) {
-            console.log(res);
-            $scope.displayPost($scope.currentPost);
-        });
+            console.log(res.data);
+            //$scope.displayPost($scope.currentPost);
+            if(res.data.updated) {
+                
+                    if( vote === "upvote" ) {
+                        $scope.currentPost.upvotes += 1;
+                        $scope.currentPost.downvotes -= 1;
+                    } else {
+                        $scope.currentPost.downvotes += 1;
+                        $scope.currentPost.upvotes -= 1;
+                    }
+                
+            } else if(res.data.isMatch) {
+                console.log("Nothing to change!");
+            } else {
+                if( vote === "upvote" ) {
+                    $scope.currentPost.upvotes += 1;
+                } else {
+                    $scope.currentPost.downvotes += 1;
+                }
+            }
+
+        });  
     };
 
 
     $http.get('/posts').then(function (res) {
         console.log(res.data);
+        if(!res.data)
+            location.href = "#!console";
         $scope.postIDs = res.data.posts;
     });
 
@@ -177,7 +215,7 @@ app.controller('postsController', function ($scope, $http) {
             .then(function (res) {
                 console.log(res);
                 $scope.commentDetails.comment = "";
-                $scope.displayPost($scope.currentPost);
+                $scope.currentPost.reviews = res.data;
             });
         }
         
@@ -201,5 +239,11 @@ app.controller('postsController', function ($scope, $http) {
         }
     };
 
+    $scope.logOut = function() {
+        $http.get('/logout').then(function(res) {
+            console.log(res);
+            location.href = "#!console";
+        });
+    };
 
 });

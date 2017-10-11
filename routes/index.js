@@ -59,14 +59,24 @@ router.post('/login', function(req, res) {
 });
 
 
+router.get('/logout', function(req, res) {
+  req.session.destroy();
+  res.json({ msg: "Session Destroyed!" });
+});
+
+
 
 
 router.get('/blogs', function(req, res, next) {
+  if(!req.session.user) {
+    res.end();
+  } else {
     console.log("User Id: ", req.session.user._id);
     userModel.findOne({_id: mongoose.Types.ObjectId(req.session.user._id)}).populate('blogs').exec(function(err, doc) {
       if(err) throw err;
       res.json(doc);
     });
+  }
 });
 
 router.post('/newblog', function(req, res) {
@@ -92,12 +102,16 @@ router.post('/saveId', function(req, res) {
 });
 
 router.get('/posts', function(req, res) {
-  console.log(req.session.user.blog._id);
-  blogModel.findOne({ _id: mongoose.Types.ObjectId(req.session.user.blog._id) }).populate('posts', '_id title')
-  .exec(function(err, docs) {
-    if(err) throw err;
-    res.json(docs);
-  });
+  if(!req.session.user) {
+    res.end();
+  } else {
+      console.log(req.session.user.blog._id);
+      blogModel.findOne({ _id: mongoose.Types.ObjectId(req.session.user.blog._id) }).populate('posts', '_id title')
+      .exec(function(err, docs) {
+        if(err) throw err;
+        res.json(docs);
+      });
+  }
 });
 
 router.get('/posts/:id', function(req, res) {
@@ -118,32 +132,42 @@ router.get('/posts/:id', function(req, res) {
 
 router.post('/newcomment', function(req, res) {
   console.log(req.body);
-  reviewModel.update({_id: mongoose.Types.ObjectId(req.session.user.blog.post.reviews._id) },
-   { $push: { comments: { userDetails: mongoose.Types.ObjectId(req.session.user._id), comment: req.body.comment } } },
-   function(err, doc) {
+  reviewModel.update({_id: mongoose.Types.ObjectId(req.session.user.blog.post.reviews._id) }, { $push: { comments: { userDetails: mongoose.Types.ObjectId(req.session.user._id), comment: req.body.comment } } }, function(err, doc) {
     if(err) throw err;
-    res.json(doc);
+    console.log(doc);
+    reviewModel.findOne({_id: mongoose.Types.ObjectId(req.session.user.blog.post.reviews._id) }).populate('comments.userDetails', 'name')
+     .exec(function(err, doc) {
+      if(err) throw err;
+      res.json({ comments:  doc.comments});
+    });
   });
+   
 });
 
 router.post('/vote', function(req, res) {
+  var isMatch = updated = false;
   console.log(req.body);
   reviewModel.findOne({ _id: mongoose.Types.ObjectId(req.body.id) }, function(err, doc) {
     if(err) throw err;
-    if(doc.votes.length !== 0) {
-        doc.votes.forEach(function(voteDetail, index) {
-            if( doc.votes[index].userDetails.equals(mongoose.Types.ObjectId(req.session.user._id)) ) {
-              console.log("Match Found");
-              doc.votes[index].vote = req.body.vote;
-            } else if(index === doc.votes.length - 1) {
-              doc.votes.push({ userDetails: mongoose.Types.ObjectId(req.session.user._id), vote: req.body.vote });
-            }
-        });
-    } else {
-        doc.votes.push({ userDetails: mongoose.Types.ObjectId(req.session.user._id), vote: req.body.vote });
+    
+    doc.votes.forEach(function(voteDetail, index) {
+        if( doc.votes[index].userDetails.equals(mongoose.Types.ObjectId(req.session.user._id)) ) {
+          console.log("Match Found");
+          if( doc.votes[index].vote === req.body.vote)
+            isMatch = true;
+          else {
+            doc.votes[index].vote = req.body.vote;
+            updated = true;
+          }
+        }
+    });
+    if(!updated && !isMatch) {
+      doc.votes.push({ userDetails: mongoose.Types.ObjectId(req.session.user._id), vote: req.body.vote });
     }
     doc.save();
-    res.json(doc);
+    res.json({ isMatch: isMatch, updated: updated });
+      
+    
   });
 });
 
