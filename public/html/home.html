@@ -7,7 +7,7 @@
             <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
                 <i class="fa fa-bars"></i>                       
             </button>
-            <a class="navbar-brand" href="#">Blogger</a>
+            <a class="navbar-brand" href="#!dashboard/home">Blogger</a>
         </div>
         <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
         <ul class="nav navbar-nav navbar-right">
@@ -34,12 +34,33 @@
 
 <div class="homeContent">
 
-    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4">
-        <div class="input-group">
-            <input type="text" placeholder="Serach For Users.." class="form-control">
-            <span class="input-group-btn"><button class="btn btn-primary"><i class="fa fa-search"></i></button></span>
+    <div class="row">
+        <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="input-group">
+                <input type="text" placeholder="Serach For Users.." class="form-control" ng-model="searchDetails.query">
+                <span class="input-group-btn"><button class="btn btn-primary" ng-click="search()"><i class="fa fa-search"></i></button></span>
+            </div>
         </div>
     </div>
+    
+
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" ng-repeat="result in searchDetails.results track by $index">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ result.name }}
+                </div>
+                <div class="panel-body">
+                    <b>Blogs: </b> {{ result.blogCount }}
+                    <b>Posts: </b> {{ result.postCount }}
+                    <b>Views: </b> {{ result.viewCount }}
+                    <b>Votes: </b> {{ result.voteCount }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
 
     
 

@@ -45,6 +45,12 @@ app.controller('consoleController', function($scope, $http) {
         $scope.alerts[prop] = "";
     };
 
+    $http.get('/checksession').then(function(res) {
+        console.log(res);
+        if(res.data.isLoggedIn)
+            location.href = '#!/dashboard/home';
+    });
+
 
     $scope.Login = function() {
         $http.post('/login', $scope.login).then(function(res) {
@@ -66,6 +72,8 @@ app.controller('consoleController', function($scope, $http) {
                     });
                 } else {
                     console.log(res.data);
+                    alert("Successfully Registered!");
+                    location.href = "#!console";
                 }
             });
         
@@ -73,9 +81,47 @@ app.controller('consoleController', function($scope, $http) {
 
 });
 
-app.controller('homeController', function ($scope) {
+app.controller('homeController', function ($scope, $http) {
     $scope.title = "Home";
     $scope.isNavCollapsed = true;
+    $scope.searchDetails = {
+        query: "",
+        results: [ ]
+    };
+
+    $scope.calcData = function() {
+        $scope.searchDetails.results.forEach(function(result, indexA) {
+            if(!result.blogs) {
+                $scope.searchDetails.results[indexA].blogCount = 0;
+                $scope.searchDetails.results[indexA].viewCount = 0;
+                $scope.searchDetails.results[indexA].voteCount = 0;
+                $scope.searchDetails.results[indexA].commentCount = 0;
+            } else {
+                $scope.searchDetails.results[indexA].blogCount = result.blogs.length;
+                $scope.searchDetails.results[indexA].blogs.forEach(function(blog, indexB) {
+                    $scope.searchDetails.results[indexA].postCount += blog.posts.length;
+                    $scope.searchDetails.results[indexA].blogs[indexB].posts.forEach(function(reviews, indexC) {
+                        $scope.searchDetails.results[indexA].viewCount += reviews.views.length;
+                        $scope.searchDetails.results[indexA].voteCount += reviews.votes.length;
+                        $scope.searchDetails.results[indexA].commentCount += reviews.comments.length; 
+                    });
+                });
+            }
+        });
+        console.log($scope.searchDetails.results);
+    };
+
+    $scope.search = function() {
+        if(!$scope.searchDetails.query) {
+            alert("Form Field Empty!");
+        } else {
+            $http.get('/searchbyuser/' + $scope.searchDetails.query).then(function(res) {
+                console.log(res);
+                $scope.searchDetails.results = res.data;
+                $scope.calcData();
+            });
+        }
+    };
 
     $scope.logOut = function() {
         $http.get('/logout').then(function(res) {
@@ -201,6 +247,7 @@ app.controller('postsController', function ($scope, $http) {
         $http.get('/posts/' + post._id).then(function (res) {
             console.log(res.data);
             $scope.currentPost = res.data;
+            angular.element(document.querySelector('.currentPostBody')).html($scope.currentPost.body);
             $scope.calcData();
         });
     }

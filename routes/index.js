@@ -64,6 +64,34 @@ router.get('/logout', function(req, res) {
   res.json({ msg: "Session Destroyed!" });
 });
 
+router.get('/checksession', function(req, res) {
+  if(req.session.user) {
+    res.json({ isLoggedIn: true });
+  } else {
+    res.json({ isLoggedIn: false });
+  }
+});
+
+router.get('/searchbyuser/:name', function(req, res) {
+  console.log(req.params.name);
+  userModel.find({ $text: { $search: req.params.name } }, { dob: 0, password: 0 }).populate(
+    {
+      path: 'blogs',
+      populate: {
+        path: 'posts',
+        select: 'reviews',
+        populate: {
+          path: 'reviews'
+        }
+      }
+    }
+  )
+  .exec(function(err, doc) {
+    if(err) throw err;
+    res.json(doc);
+  });
+});
+
 
 
 
@@ -171,11 +199,14 @@ router.post('/vote', function(req, res) {
   });
 });
 
+var showdown = require('showdown'),
+    converter = new showdown.Converter();
+
 router.post('/newpost', function(req, res) {
   var postDoc = new postModel(
     { 
       title: req.body.title,
-      body: req.body.body,
+      body: converter.makeHtml(req.body.body),
       reviews: new mongoose.Types.ObjectId() 
   });
   postDoc.save(function(err, doc) {

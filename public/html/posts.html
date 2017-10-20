@@ -7,7 +7,7 @@
             <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
                 <i class="fa fa-bars"></i>                       
             </button>
-            <a class="navbar-brand" href="#">Blogger</a>
+            <a class="navbar-brand" href="#!dashboard/home">Blogger</a>
         </div>
         <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
         <ul class="nav navbar-nav navbar-right">
@@ -65,11 +65,11 @@
 <div ng-if="!newPost"  class="display text-justify">
     <div class="panel">
         <div class="panel-body">
-            <p class="postContent jumbotron">
+            <div class="postContent jumbotron">
                     <span class="postTitle"><i class="fa fa-quote-left" style="font-size: 0.8em"></i>
                          {{ currentPost.title }} <i class="fa fa-quote-right" style="font-size: 0.8em"></i></span>
-                    {{ currentPost.body }}
-            </p>
+                    <div class="currentPostBody"></div>
+            </div>
             <span class="postViews">{{ currentPost.views }} Views</span><br>
             <butoon class="btn btn-primary voteBtn" ng-click="vote('upvote')"><span class="text-success"><i class="fa fa-chevron-up"></i> Upvote {{ currentPost.upvotes }}</span></butoon><butoon class="btn btn-danger voteBtn" ng-click="vote('downvote')"><span class="text-danger"><i class="fa fa-chevron-down"></i> Downvote  {{ currentPost.downvotes }}</span></butoon>
         </div>
