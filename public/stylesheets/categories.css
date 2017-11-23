@@ -1,0 +1,35 @@
+.homeContent {
+    margin: 8%;
+}
+
+.cat {
+    box-shadow: 1px 1px 5px #888;
+    height: 150px;
+    cursor: pointer;
+    margin-bottom: 30px;
+    background: #0084b4;
+    line-height: 150px;
+    color: #fff;
+    transition: color 0.2s ease-in;
+    transition: box-shadow 0.2s ease-in;
+}
+
+.cat:hover {
+    box-shadow: 10px 10px 15px #888;
+    background: #fff;
+    color: #ff9 !important;
+}
+
+.cat span {
+    display: inline-block;
+    line-height: normal;
+    vertical-align: middle;
+    font-size: 2em;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #444;
+    font-family: 'Righteous', cursive;
+    padding: 10px;
+}
+
+
+

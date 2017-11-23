@@ -1,0 +1,94 @@
+<link href="../stylesheets/blogposts.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../stylesheets/dashboard.css">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
+                <i class="fa fa-bars"></i>                       
+            </button>
+            <a class="navbar-brand" href="#!dashboard/categories">Blogger</a>
+        </div>
+        <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#!dashboard/categories">Categories</a></li>
+                <li><a href="#!dashboard/blogs">Blogs</a></li>
+                <li class="dropdown" uib-dropdown>
+                    <a href id="simple-dropdown" uib-dropdown-toggle>
+                        Nvs <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+                        <li>
+                            <a href><i class="fa fa-user"></i>&nbsp;&nbsp;&nbsp;Account</a>
+                        </li>
+                        <li>
+                            <a href ng-click="logOut()"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;&nbsp;Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<nav class="sideNav">
+    <span class="sideNavListHead text-justify">Blog Posts</span>
+    <ul class="sideNavList">
+        <button class="submit" ng-click="toggleNewPost()"><i class="fa fa-plus"></i> ADD NEW POST</button><br>
+        <li ng-repeat="post in postIDs" ng-class="{active: (post.title === post.title)}" >
+            <button class="btn-block" ng-click="displayPost(post)">{{ $index + 1 }}. {{post.title}}</button>
+        </li>
+    </ul>
+</nav>
+
+<div class="panel" ng-repeat="post in posts track by $index">
+    <div class="panel-body">
+        <div class="postContent jumbotron">
+            <span class="postTitle"><i class="fa fa-quote-left" style="font-size: 0.8em"></i>
+                    {{ post.title }} <i class="fa fa-quote-right" style="font-size: 0.8em"></i></span>
+            <h4><b>Blog</b> : {{ post.blogName }} <b>By</b> : {{ post.blogAuthor }}</h4>
+            <span ng-bind-html="post.body">
+
+            </span>
+            <a ng-click="expand(post.blogName + '---' +  post.title)">Read More..</a>
+        </div>
+        
+    </div>
+</div>
+
+<div class="panel" ng-if="showCurrent">
+    <div class="panel-body">
+        <span style="float: right; cursor: pointer"><i class="fa fa-times fa-2x" ng-click="close()"></i></span>
+        <div class="postContent jumbotron">
+            <span class="postTitle"><i class="fa fa-quote-left" style="font-size: 0.8em"></i>
+                    {{ currentPost.title }} <i class="fa fa-quote-right" style="font-size: 0.8em"></i></span>
+            <h4><b>Blog</b> : {{ currentPost.blogName }} <b>By</b> : {{ currentPost.author }}</h4>
+            <div ng-bind-html="currentPost.body">
+
+            </div>
+
+            <span class="postViews">{{ currentPost.viewCount }} Views</span><br>
+            <butoon class="btn btn-primary voteBtn" ng-click="vote('upvote')">
+                <span class="text-success"><i class="fa fa-chevron-up"></i> Upvote {{ currentPost.upCount }}</span>
+            </butoon>
+            <button class="btn btn-danger voteBtn" ng-click="vote('downvote')">
+                <span class="text-danger"><i class="fa fa-chevron-down"></i> Downvote  {{ currentPost.downCount }}</span>
+            </button>
+            <h2 class="rating-heading" style="font-size: 2em" ng-click="isCollapsed = !isCollapsed">Comments</h2>
+            <div class="row">
+                <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                    <textarea rows="3" class="form-control" placeholder="Add Comment.." ng-model='commentDetails.comment' required></textarea>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                <button class="btn btn-primary btn-block submit" ng-click="submitComment()">Comment</button>
+            </div>
+            <div class="rating" ng-repeat="obj in currentPost.reviews.comments" uib-collapse="isCollapsed">
+                <span class="rating-heading">{{ obj.userDetails.name }}</span>
+                <blockquote class="rating-comment">{{ obj.comment }}</blockquote>
+            </div>
+
+        </div>
+        
+    </div>
+</div>

@@ -3,7 +3,6 @@ var bcrypt = require('bcryptjs');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    blogs: [{type: Schema.Types.ObjectId, ref: 'blog'}],
     name: String,
     dob: String,
     email: String,

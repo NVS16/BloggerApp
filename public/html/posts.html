@@ -7,11 +7,11 @@
             <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
                 <i class="fa fa-bars"></i>                       
             </button>
-            <a class="navbar-brand" href="#!dashboard/home">Blogger</a>
+            <a class="navbar-brand" href="#!dashboard/categories">Blogger</a>
         </div>
         <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#!dashboard/home">Home</a></li>
+            <li><a href="#!dashboard/categories">Categories</a></li>
             <li><a href="#!dashboard/blogs">Blogs</a></li>
             <li class="dropdown" uib-dropdown>
                 <a href id="simple-dropdown" uib-dropdown-toggle>
@@ -53,7 +53,7 @@
     </div>
     <div class="row">
         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <label for="#newPostBody">BODY</label>
+            <label for="#newPostBody">BODY <span style="color: red; font-size: 0.7em">( Note: Use mark-down syntax for greater effect. )</span></label>
             <textarea rows="15" id="newPostBody" class="form-control" placeholder="Enter Post Body.." ng-model="newPostContent.body"></textarea>
         </div>
         <div class="form-group col-lg-2 col-md-2 col-sm-2 col-xs-2">

@@ -1,11 +1,33 @@
 [
-    {
-        _id: ObjectId("56955ca46063c5600627f393"),
-        posts: [
-            ObjectId("56955ca46063c5600627f392"),
-            ObjectId("507f1f77bcf86cd799439011")
+ 
+{
+        user: ObjectId("59d8b7776d7c3a651eebb2e8"),
+        "_id" : ObjectId("56955ca46063c5600627f393"),
+        "posts" : [
+                ObjectId("56955ca46063c5600627f392"),
+                ObjectId("507f1f77bcf86cd799439011")
         ],
-        name: "Food Habits",
-        description: "A blog on healthy food habits."
-    }
-]
+        "name" : "Food Habits",
+        "description" : "A blog on healthy food habits.",
+        category: "Health and Fitness"
+},
+{
+        user: ObjectId("59d8b7776d7c3a651eebb2e8"),
+        "_id" : ObjectId("59d8c6197b57c739cb8d6549"),
+        "name" : "JEE PREP",
+        "description" : "A blog on tips and tricks on cracking jee.",
+        "posts" : [
+        ],
+        "__v" : 0,
+        category: "Education"
+},
+{
+        user: ObjectId("59d8b7776d7c3a651eebb2e8"),
+        "_id" : ObjectId("59da05cb9740162c2c39c837"),
+        "name" : "Football",
+        "description" : "A blog on football matches, players and tournaments.",
+        "posts" : [
+        ],
+        "__v" : 0,
+        category: "Sports"
+}]

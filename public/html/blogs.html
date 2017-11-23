@@ -7,11 +7,11 @@
             <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
                 <i class="fa fa-bars"></i>                       
             </button>
-            <a class="navbar-brand" href="#!dashboard/home">Blogger</a>
+            <a class="navbar-brand" href="#!dashboard/categories">Blogger</a>
         </div>
         <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#!dashboard/home">Home</a></li>
+            <li><a href="#!dashboard/categories">Categories</a></li>
             <li><a href="#!dashboard/blogs">Blogs</a></li>
             <li class="dropdown" uib-dropdown>
                 <a href id="simple-dropdown" uib-dropdown-toggle>
@@ -40,7 +40,25 @@
                 <input class="form-control" placeholder="Blog Name" ng-model="newBlog.name">
             </div>
             <div class="blog-body">
-                <textarea class="form-control" rows="3" placeholder="Brief Description" ng-model="newBlog.description"></textarea>
+                <div class="form-group">
+                    <textarea class="form-control" rows="3" placeholder="Brief Description" ng-model="newBlog.description"></textarea>        
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Category</span>
+                        <select class="form-control" ng-model="newBlog.category">
+                            <option>Science and Technology</option>
+                            <option>Education</option>
+                            <option>Sports</option>
+                            <option>Miscellaneous</option>
+                            <option>Food and Travel</option>
+                            <option>Art and Architecture</option>
+                            <option>Creative</option>
+                            <option>Health and Fitness</option>
+                            <option>Spiritual</option>
+                        </select>
+                    </div>
+                </div>
                 <button class="btn btn-info" id="submit" ng-click="submitBlog()">ADD BLOG</button>
             </div>
         </div>
@@ -55,6 +73,7 @@
                     <li>
                         <p>{{ blog.description }}</p>
                     </li>
+                    <li><u>{{ blog.category }}</u></li>
                 </ul>
             </div>
         </div>

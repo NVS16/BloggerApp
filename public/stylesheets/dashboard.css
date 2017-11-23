@@ -3,9 +3,13 @@ body {
     text-align: center;
   }
   
-  a {
+  nav a {
     color: #fff !important;
     text-shadow: 1px 1px 8px #888;
+  }
+
+  a {
+    cursor: pointer;
   }
   
   .navbar {

@@ -72,26 +72,49 @@ router.get('/checksession', function(req, res) {
   }
 });
 
-router.get('/searchbyuser/:name', function(req, res) {
-  console.log(req.params.name);
-  userModel.find({ $text: { $search: req.params.name } }, { dob: 0, password: 0 }).populate(
-    {
-      path: 'blogs',
-      populate: {
-        path: 'posts',
-        select: 'reviews',
-        populate: {
-          path: 'reviews'
-        }
-      }
-    }
-  )
-  .exec(function(err, doc) {
-    if(err) throw err;
-    res.json(doc);
-  });
+router.get('/getblogposts/:cat/:blog?/:post?', function(req, res) {
+  var cat = req.params.cat;
+  console.log(cat);
+  if(req.params.blog === undefined) {
+    blogModel.find({ category: cat })
+    .populate({ path: 'posts', select: 'title body' })
+    .populate('user', 'name')
+    .exec(function(err, docs) {
+      if(err) throw err;
+      res.json(docs);
+    });
+  } else {
+    var blogName = req.params.blog;
+    var postName = req.params.post;
+    console.log(blogName + '--' + postName);
+    blogModel.findOne({ name: blogName }, { name: 1, user: 1 }).populate('user', 'name').exec( function(err, blogDoc) {
+      if(err) throw err;
+      console.log(blogDoc + '------------');
+      postModel.findOne({ title: postName }).populate({ path: 'reviews', populate: { path: 'comments.userDetails', select: 'name' } }).exec( function(err, postDoc) {
+        if(err) throw err;
+        
+        res.json({ post: postDoc, blog: blogDoc });
+      });
+    });
+    console.log();
+  }
 });
 
+router.post('/blogpostsviews', function(req, res) {
+  console.log(req.body);
+  blogModel.findOne({ name: req.body.blog }, function(err, blogDoc) {
+    postModel.findOne({ title: req.body.post }, function(err, postDoc) {
+      if(blogDoc.posts.indexOf(postDoc._id) === -1) {
+        res.send("View Couldnt be updated!");
+      } else {
+        reviewModel.update({ _id:  mongoose.Types.ObjectId(postDoc.reviews)}, { $push: { views: mongoose.Types.ObjectId(req.session.user._id) } }, function(err, doc) {
+          if(err) throw err;
+          res.json(doc);
+        });
+      }
+    });
+  });
+});
 
 
 
@@ -100,7 +123,7 @@ router.get('/blogs', function(req, res, next) {
     res.end();
   } else {
     console.log("User Id: ", req.session.user._id);
-    userModel.findOne({_id: mongoose.Types.ObjectId(req.session.user._id)}).populate('blogs').exec(function(err, doc) {
+    blogModel.find({user: mongoose.Types.ObjectId(req.session.user._id)}).exec(function(err, doc) {
       if(err) throw err;
       res.json(doc);
     });
@@ -109,13 +132,9 @@ router.get('/blogs', function(req, res, next) {
 
 router.post('/newblog', function(req, res) {
   console.log(req.body);
-  var newBlog = new blogModel({ name: req.body.name, description: req.body.description});
+  var newBlog = new blogModel({ user: mongoose.Types.ObjectId(req.session.user._id), name: req.body.name, description: req.body.description, category: req.body.category});
   newBlog.save(function(err, doc) {
     if(err) throw err;
-    userModel.update({ _id: mongoose.Types.ObjectId(req.session.user._id) }, { $push: { blogs: doc._id } }, function(err, doc) {
-      if(err) throw err;
-      console.log("User's blogs array updated..", doc);
-    });
     res.json(doc);
   });
 });
@@ -149,21 +168,16 @@ router.get('/posts/:id', function(req, res) {
   .exec(function(err, doc) {
     if(err) throw err;
     req.session.user.blog.post = doc;
-    reviewId = doc.reviews._id;
-    reviewModel.update({ _id: mongoose.Types.ObjectId(reviewId) }, { $push: { views: mongoose.Types.ObjectId(req.session.user._id) } }, function(err, doc) {
-      if(err) throw err;
-      console.log("Review's views incremented...", doc);
-    });
     res.json(doc);
   });
 });
 
 router.post('/newcomment', function(req, res) {
   console.log(req.body);
-  reviewModel.update({_id: mongoose.Types.ObjectId(req.session.user.blog.post.reviews._id) }, { $push: { comments: { userDetails: mongoose.Types.ObjectId(req.session.user._id), comment: req.body.comment } } }, function(err, doc) {
+  reviewModel.update({_id: mongoose.Types.ObjectId(req.body.id) }, { $push: { comments: { userDetails: mongoose.Types.ObjectId(req.session.user._id), comment: req.body.comment } } }, function(err, doc) {
     if(err) throw err;
     console.log(doc);
-    reviewModel.findOne({_id: mongoose.Types.ObjectId(req.session.user.blog.post.reviews._id) }).populate('comments.userDetails', 'name')
+    reviewModel.findOne({_id: mongoose.Types.ObjectId(req.body.id) }).populate('comments.userDetails', 'name')
      .exec(function(err, doc) {
       if(err) throw err;
       res.json({ comments:  doc.comments});
@@ -177,7 +191,7 @@ router.post('/vote', function(req, res) {
   console.log(req.body);
   reviewModel.findOne({ _id: mongoose.Types.ObjectId(req.body.id) }, function(err, doc) {
     if(err) throw err;
-    
+    console.log("Doc : " ,doc);
     doc.votes.forEach(function(voteDetail, index) {
         if( doc.votes[index].userDetails.equals(mongoose.Types.ObjectId(req.session.user._id)) ) {
           console.log("Match Found");

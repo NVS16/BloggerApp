@@ -1,4 +1,4 @@
-var app = angular.module("bloggingApp", [ "ui.bootstrap", "ngRoute"]);
+var app = angular.module("bloggingApp", [ "ui.bootstrap", "ngRoute", "ngSanitize"]);
 
 app.config(function ($routeProvider) {
     $routeProvider
@@ -9,9 +9,13 @@ app.config(function ($routeProvider) {
             templateUrl: "../html/console.html",
             controller: 'consoleController'
         })
-        .when("/dashboard/home", {
-            templateUrl: "../html/home.html",
-            controller: 'homeController'
+        .when("/dashboard/categories", {
+            templateUrl: "../html/categories.html",
+            controller: 'catsController'
+        })
+        .when("/dashboard/categories/:cat/:blog?/:post?", {
+            templateUrl: '../html/blogposts.html',
+            controller: 'blogPostsController'
         })
         .when("/dashboard/blogs", {
             templateUrl: "../html/blogs.html",
@@ -48,7 +52,7 @@ app.controller('consoleController', function($scope, $http) {
     $http.get('/checksession').then(function(res) {
         console.log(res);
         if(res.data.isLoggedIn)
-            location.href = '#!/dashboard/home';
+            location.href = '#!/dashboard/categories';
     });
 
 
@@ -57,7 +61,7 @@ app.controller('consoleController', function($scope, $http) {
             console.log(res);
             alert(res.data.msg);
             if(res.data.toLogin) {
-                location.href = '#!/dashboard/home';
+                location.href = '#!/dashboard/categories';
             }
         });
     };
@@ -81,14 +85,14 @@ app.controller('consoleController', function($scope, $http) {
 
 });
 
-app.controller('homeController', function ($scope, $http) {
-    $scope.title = "Home";
+app.controller('catsController', function ($scope, $http) {
+    $scope.title = "Categories";
     $scope.isNavCollapsed = true;
     $scope.searchDetails = {
         query: "",
         results: [ ]
     };
-
+/*
     $scope.calcData = function() {
         $scope.searchDetails.results.forEach(function(result, indexA) {
             if(!result.blogs) {
@@ -110,17 +114,16 @@ app.controller('homeController', function ($scope, $http) {
         });
         console.log($scope.searchDetails.results);
     };
+*/
+    $scope.cats = [ {name: "Science and Technology", img: "../images/0.jpeg"}, { name:  "Education", img: "../images/1.jpg"},
+    { name: "Sports", img: "../images/2.jpg"},
+    {name: "Food and Travel", img: "../images/4.jpg"},{ name: "Art and Architecture", img: "../images/5.jpg"},
+    {name: "Creative", img: "../images/6.png"},
+    {name: "Health and Fitness", img: "../images/7.jpg"},{ name: "Spiritual", img: "../images/8.jpg"} , 
+    {name: "Miscellaneous", img: "../images/3.jpg"} ];
 
-    $scope.search = function() {
-        if(!$scope.searchDetails.query) {
-            alert("Form Field Empty!");
-        } else {
-            $http.get('/searchbyuser/' + $scope.searchDetails.query).then(function(res) {
-                console.log(res);
-                $scope.searchDetails.results = res.data;
-                $scope.calcData();
-            });
-        }
+    $scope.getBlogPosts = function(cat) {
+        location.href = "#!dashboard/categories/" + cat;
     };
 
     $scope.logOut = function() {
@@ -131,18 +134,119 @@ app.controller('homeController', function ($scope, $http) {
     };
 });
 
+app.controller('blogPostsController', function($http, $scope, $routeParams) {
+    $scope.posts = [];
+    $scope.commentDetails = {
+        comment: "",
+        id: ""
+    };
+    console.log($routeParams.cat);
+    if($routeParams.blog === undefined) {
+        $scope.showCurrent = false;
+        $http.get('/getblogposts/' + $routeParams.cat)
+            .then(function(res) {
+                console.log(res);
+                res.data.forEach(function(blog) {
+                    blog.posts.forEach(function(post) {
+                        post.blogId = blog._id;
+                        post.blogName = blog.name;
+                        post.blogAuthor = blog.user.name;
+                        post.body = post.body.slice(0, 200);
+                        $scope.posts.push(post);
+                    });
+                });
+            });
+    } else {
+        $scope.showCurrent = true;
+        console.log($routeParams.blog + '---' + $routeParams.post);
+        $http.get('/getblogposts/' + $routeParams.cat + '/' + $routeParams.blog + '/' + $routeParams.post)
+            .then(function(res) {
+                console.log(res);
+                $scope.currentPost = res.data.post;
+                $scope.commentDetails.id = $scope.currentPost.reviews._id;
+                $scope.currentPost.blogName = res.data.blog.name;
+                $scope.currentPost.author = res.data.blog.user.name;
+                $scope.currentPost.upCount = $scope.currentPost.downCount = 0;
+                $scope.currentPost.viewCount = $scope.currentPost.reviews.views.length;
+                $scope.currentPost.reviews.votes.forEach(function(voteDetail, index) {
+                    console.log(voteDetail);
+                    if( voteDetail.vote === "upvote" ) {
+                        $scope.currentPost.upCount += 1;
+                    } else {
+                        $scope.currentPost.downCount+= 1;
+                    }
+                });
+            });
+    }
+
+        $scope.close = function() {
+            location.href = "#!dashboard/categories/" + $routeParams.cat;
+        };
+
+        $scope.expand = function(names) {
+            var params = names.split('---');
+            $http.post('/blogpostsviews',{ blog: params[0], post: params[1] })
+            .then(function(res) {
+                console.log(res);
+            });
+            location.href = "#!dashboard/categories/" + $routeParams.cat + '/' + params[0] + '/' + params[1];
+        };
+
+        $scope.submitComment = function () {
+            if ($scope.commentDetails.comment === "") {
+                alert("Form field empty...");
+            } else {
+                $http.post('/newcomment', $scope.commentDetails)
+                .then(function (res) {
+                    console.log(res);
+                    $scope.commentDetails.comment = "";
+                    $scope.currentPost.reviews = res.data;
+                });
+            }
+            
+        };
+    
+        $scope.vote = function(vote) {
+            $http.post('/vote', { id: $scope.currentPost.reviews._id, vote: vote }).then(function(res) {
+                console.log(res.data);
+                //$scope.displayPost($scope.currentPost);
+                if(res.data.updated) {
+                    
+                        if( vote === "upvote" ) {
+                            $scope.currentPost.upCount += 1;
+                            $scope.currentPost.downCount -= 1;
+                        } else {
+                            $scope.currentPost.downCount += 1;
+                            $scope.currentPost.upCount -= 1;
+                        }
+                    
+                } else if(res.data.isMatch) {
+                    console.log("Nothing to change!");
+                } else {
+                    if( vote === "upvote" ) {
+                        $scope.currentPost.upCount += 1;
+                    } else {
+                        $scope.currentPost.downCount += 1;
+                    }
+                }
+    
+            });  
+        };
+    });
+
 app.controller('blogsController', function ($http, $scope) {
     $scope.title = "Blogs";
     $scope.newBlog = {
         name: "",
-        description: ""
+        description: "",
+        category: "Science and Technology"
     };
 
     $http.get('/blogs').then(function (res) {
         console.log(res);
         if(!res.data)
             location.href = "#!console";
-        $scope.blogs = res.data.blogs;
+        $scope.blogs = res.data;
     });
 
     $scope.submitBlog = function () {
@@ -182,11 +286,13 @@ app.controller('postsController', function ($scope, $http) {
         body: ""
     };
     $scope.commentDetails = {
-        comment: ""
+        comment: "",
+        id: ""
     };
 
 
     $scope.calcData = function() {
+        $scope.commentDetails.id = $scope.currentPost.reviews._id;
         $scope.currentPost.views = 0;
         $scope.currentPost.upvotes = 0;
         $scope.currentPost.downvotes = 0;
