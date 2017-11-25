@@ -232,6 +232,13 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
     
             });  
         };
+
+        $scope.logOut = function() {
+            $http.get('/logout').then(function(res) {
+                console.log(res);
+                location.href = "#!console";
+            });
+        };
     });
 
 app.controller('blogsController', function ($http, $scope) {
