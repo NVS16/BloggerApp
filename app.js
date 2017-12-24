@@ -17,7 +17,7 @@ var users = require('./routes/users');
 var app = express();
 
 // mongoose setup
-mongoose.connect('mongodb://localhost:27017/blogger');
+mongoose.connect(process.env.MONGOLAB_URI);
 var db = mongoose.connection;
 db.once('open', function() {
   console.log("Connection to MongoDB succesful...");
