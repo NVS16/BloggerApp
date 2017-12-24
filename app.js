@@ -17,13 +17,11 @@ var users = require('./routes/users');
 var app = express();
 
 // mongoose setup
-mongoose.connect(process.env.MONGOLAB_URI , { useMongoClient: true });
-var db = mongoose.connection;
-db.once('open', function() {
-  console.log("Connection to MongoDB succesful...");
-}).on('error', function(error) {
-  console.log("MongoDB connection error: ", error);
-});
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGOLAB_URI , { useMongoClient: true }).then(
+  () => {console.log("Connection to MongoDB succesful...");},
+  err => {console.log("MongoDB connection error: ", error);}
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
