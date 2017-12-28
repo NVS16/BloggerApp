@@ -18,10 +18,7 @@ var app = express();
 
 // mongoose setup
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGOLAB_URI , { useMongoClient: true }).then(
-  () => {console.log("Connection to MongoDB succesful...");},
-  err => {console.log("MongoDB connection error: ", error);}
-);
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/blogger' , { useMongoClient: true })
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
