@@ -31,6 +31,7 @@
     </div>
 </nav>
 
+<p ng-if="noPosts" style="margin-top: 8%; font-size: 20px">No posts in this category yet.</p>
 <div class="panel" ng-repeat="post in posts track by $index">
     <div class="panel-body">
         <div class="postContent jumbotron">

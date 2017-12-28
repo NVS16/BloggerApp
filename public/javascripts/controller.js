@@ -74,6 +74,10 @@ app.controller('consoleController', function($scope, $http) {
             } else {
                 if(res.data.toLogin) {
                     location.href = '#!/dashboard/categories';
+                } else {
+                    alert(res.data.msg);
+                    $scope.login.email = "";
+                    $scope.login.password = "";
                 }
             }
         });
@@ -160,6 +164,7 @@ app.controller('catsController', function ($scope, $http) {
 
 app.controller('blogPostsController', function($http, $scope, $routeParams) {
     $scope.posts = [];
+    $scope.noPosts = false;
     $scope.commentDetails = {
         comment: "",
         id: ""
@@ -177,15 +182,19 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
         $http.get('/getblogposts/' + $routeParams.cat)
             .then(function(res) {
                 console.log(res);
-                res.data.forEach(function(blog) {
-                    blog.posts.forEach(function(post) {
-                        post.blogId = blog._id;
-                        post.blogName = blog.name;
-                        post.blogAuthor = blog.user.name;
-                        post.body = post.body.slice(0, 200);
-                        $scope.posts.push(post);
+                if(res.data.length === 0) {
+                    $scope.noPosts = true;
+                } else {
+                    res.data.forEach(function(blog) {
+                        blog.posts.forEach(function(post) {
+                            post.blogId = blog._id;
+                            post.blogName = blog.name;
+                            post.blogAuthor = blog.user.name;
+                            post.body = post.body.slice(0, 200);
+                            $scope.posts.push(post);
+                        });
                     });
-                });
+                }
             });
     } else {
         $scope.showCurrent = true;
