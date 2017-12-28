@@ -32,6 +32,7 @@ app.config(function ($routeProvider) {
 app.controller('consoleController', function($scope, $http) {
     $scope.title = "Console";
     $scope.alerts = {};
+    $scope.alertsLogin = {};
     $scope.signup = {
         name: "",
         contact: "",
@@ -49,6 +50,10 @@ app.controller('consoleController', function($scope, $http) {
         $scope.alerts[prop] = "";
     };
 
+    $scope.eraseAlertLogin = function(prop) {
+        $scope.alertsLogin[prop] = "";
+    };
+
     $http.get('/checksession').then(function(res) {
         console.log(res);
         if(res.data.isLoggedIn)
@@ -59,9 +64,15 @@ app.controller('consoleController', function($scope, $http) {
     $scope.Login = function() {
         $http.post('/login', $scope.login).then(function(res) {
             console.log(res);
-            alert(res.data.msg);
-            if(res.data.toLogin) {
-                location.href = '#!/dashboard/categories';
+            if(res.data.errors) {
+                res.data.errors.forEach(function(obj) {
+                    $scope.alertsLogin[obj.param] = "*" + obj.msg;
+                });
+            } else {
+                alert(res.data.msg);
+                if(res.data.toLogin) {
+                    location.href = '#!/dashboard/categories';
+                }
             }
         });
     };
@@ -92,6 +103,12 @@ app.controller('catsController', function ($scope, $http) {
         query: "",
         results: [ ]
     };
+
+    $http.get('/checksession').then(function(res) {
+        console.log(res);
+        if(!res.data.isLoggedIn)
+            $scope.logOut();
+    });
 /*
     $scope.calcData = function() {
         $scope.searchDetails.results.forEach(function(result, indexA) {

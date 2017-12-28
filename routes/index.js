@@ -40,22 +40,28 @@ router.post('/signup', function(req, res) {
 
 router.post('/login', function(req, res) {
   console.log(req.body);
-  userModel.findOne({ email: req.body.email }, function(err, doc) {
-    if(err) throw err;
-    if(!doc) {
-      res.json({ msg: "User Not Found!", toLogin: false });
-    } else {
-      bcrypt.compare(req.body.password, doc.password, function(err, isMatch) {
-          if(err) throw err;
-          if( isMatch ) {
-            req.session.user = doc;
-            res.json({ msg: "Login Approved!", toLogin: true });
-          } else {
-            res.json({ msg: "Password Incorrect!", toLogin: false });
-          }
-      });
-    }
-  });
+  req.checkBody('password', 'Password Invalid!').notEmpty();
+  req.checkBody('email', 'Email Invalid!').notEmpty().isEmail();
+  if(req.validationErrors())
+    res.json({errors: req.validationErrors()});
+  else {
+    userModel.findOne({ email: req.body.email }, function(err, doc) {
+      if(err) throw err;
+      if(!doc) {
+        res.json({ msg: "User Not Found!", toLogin: false });
+      } else {
+        bcrypt.compare(req.body.password, doc.password, function(err, isMatch) {
+            if(err) throw err;
+            if( isMatch ) {
+              req.session.user = doc;
+              res.json({ msg: "Login Approved!", toLogin: true });
+            } else {
+              res.json({ msg: "Password Incorrect!", toLogin: false });
+            }
+        });
+      }
+    });
+  }
 });
 
 

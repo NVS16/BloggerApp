@@ -15,7 +15,7 @@
             <li><a href="#!dashboard/blogs">My Blogs</a></li>
             <li class="dropdown" uib-dropdown>
                 <a href id="simple-dropdown" uib-dropdown-toggle>
-                    Nvs <i class="fa fa-caret-down"></i>
+                     <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
                     <li>
@@ -29,16 +29,6 @@
         </ul>
         </div>
     </div>
-</nav>
-
-<nav class="sideNav">
-    <span class="sideNavListHead text-justify">Blog Posts</span>
-    <ul class="sideNavList">
-        <button class="submit" ng-click="toggleNewPost()"><i class="fa fa-plus"></i> ADD NEW POST</button><br>
-        <li ng-repeat="post in postIDs" ng-class="{active: (post.title === post.title)}" >
-            <button class="btn-block" ng-click="displayPost(post)">{{ $index + 1 }}. {{post.title}}</button>
-        </li>
-    </ul>
 </nav>
 
 <div class="panel" ng-repeat="post in posts track by $index">

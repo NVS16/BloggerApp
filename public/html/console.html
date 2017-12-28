@@ -15,10 +15,12 @@
             <ul class="nav navbar-nav navbar-right">
                 <div class="navbar-form">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Email" ng-model="login.email">
+                        <label>{{ alertsLogin.email }}</label>
+                        <input  ng-focus="eraseAlertLogin('email')" type="text" class="form-control" placeholder="Email" ng-model="login.email">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" ng-model="login.password">       
+                        <label>{{ alertsLogin.password }}</label>
+                        <input  ng-focus="eraseAlertLogin('password')" type="password" class="form-control" placeholder="Password" ng-model="login.password">       
                     </div>
                     <button class="btn btn-info" ng-click="Login()">LogIn</button><br>
                     <span class="form-link" ><a href="#">Forgot Password?</a></span>
@@ -31,9 +33,9 @@
     <div class="view">
         <div class="row">
             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                <div class="content">
+                <!--<div class="content">
                     <h1>{{title}}</h1>
-                </div>
+                </div>-->
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <div class="form col-lg-12 col-md-12 col-sm-12 col-xs-12">
