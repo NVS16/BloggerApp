@@ -1,0 +1,63 @@
+<div  ng-if="loading">
+        <div class="lds-css">
+            <div style="width:100%;height:100%" class="lds-dual-ring">
+            <div></div>
+            </div>
+        <style type="text/css">
+        
+        .overlay {
+                background-color:#EFEFEF;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                z-index: 2000;
+                top: 0px;
+                left: 0px;
+                opacity: .5; /* in FireFox */ 
+                filter: alpha(opacity=50); /* in IE */
+            }
+        
+        @-webkit-keyframes lds-dual-ring {
+            0% {
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+            }
+            100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+            }
+        }
+        @keyframes lds-dual-ring {
+            0% {
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+            }
+            100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+            }
+        }
+        .lds-dual-ring {
+            left: 43%;
+            margin-top: 10% !important;
+            position: fixed;
+        }
+        .lds-dual-ring div {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            top: 30px;
+            left: 30px;
+            border-radius: 50%;
+            border: 10px solid #000;
+            border-color: #f00 transparent #f00 transparent;
+            -webkit-animation: lds-dual-ring 1.3s linear infinite;
+            animation: lds-dual-ring 1.3s linear infinite;
+        }
+        </style></div>
+        
+        <div class="overlay">
+    
+        </div>
+    
+    </div>

@@ -30,6 +30,7 @@ app.config(function ($routeProvider) {
 
 
 app.controller('consoleController', function($scope, $http) {
+    $scope.loading = false;
     $scope.title = "Console";
     $scope.alerts = {};
     $scope.alertsLogin = {};
@@ -62,14 +63,15 @@ app.controller('consoleController', function($scope, $http) {
 
 
     $scope.Login = function() {
+        $scope.loading = true;
         $http.post('/login', $scope.login).then(function(res) {
             console.log(res);
+            $scope.loading = false;
             if(res.data.errors) {
                 res.data.errors.forEach(function(obj) {
                     $scope.alertsLogin[obj.param] = "*" + obj.msg;
                 });
             } else {
-                alert(res.data.msg);
                 if(res.data.toLogin) {
                     location.href = '#!/dashboard/categories';
                 }
@@ -79,8 +81,9 @@ app.controller('consoleController', function($scope, $http) {
 
     $scope.Signup = function() {
         console.log("Function Called");
-        
+            $scope.loading = true;
             $http.post('/signup', $scope.signup).then(function(res) {
+                $scope.loading = false;
                 if(res.data.errors) {
                     res.data.errors.forEach(function(obj) {
                         $scope.alerts[obj.param] = "*" + obj.msg;
@@ -99,6 +102,7 @@ app.controller('consoleController', function($scope, $http) {
 app.controller('catsController', function ($scope, $http) {
     $scope.title = "Categories";
     $scope.isNavCollapsed = true;
+    $scope.loading = false;
     $scope.searchDetails = {
         query: "",
         results: [ ]
@@ -140,12 +144,15 @@ app.controller('catsController', function ($scope, $http) {
     {name: "Miscellaneous", img: "../images/3.jpg"} ];
 
     $scope.getBlogPosts = function(cat) {
+        $scope.loading = true;
         location.href = "#!dashboard/categories/" + cat;
     };
 
     $scope.logOut = function() {
+        $scope.loading = true;
         $http.get('/logout').then(function(res) {
             console.log(res);
+            $scope.loading = false;
             location.href = "#!console";
         });
     };
@@ -157,6 +164,13 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
         comment: "",
         id: ""
     };
+
+    $http.get('/checksession').then(function(res) {
+        console.log(res);
+        if(!res.data.isLoggedIn)
+            $scope.logOut();
+    });
+    
     console.log($routeParams.cat);
     if($routeParams.blog === undefined) {
         $scope.showCurrent = false;
@@ -251,8 +265,10 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
         };
 
         $scope.logOut = function() {
+            $scope.loading = true;
             $http.get('/logout').then(function(res) {
                 console.log(res);
+                $scope.loading = false;
                 location.href = "#!console";
             });
         };
@@ -292,8 +308,10 @@ app.controller('blogsController', function ($http, $scope) {
     };
 
     $scope.logOut = function() {
+        $scope.loading = true;
         $http.get('/logout').then(function(res) {
             console.log(res);
+            $scope.loading = false;
             location.href = "#!console";
         });
     };
@@ -417,8 +435,10 @@ app.controller('postsController', function ($scope, $http) {
     };
 
     $scope.logOut = function() {
+        $scope.loading = true;
         $http.get('/logout').then(function(res) {
             console.log(res);
+            $scope.loading = false;
             location.href = "#!console";
         });
     };
