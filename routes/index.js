@@ -28,11 +28,18 @@ router.post('/signup', function(req, res) {
     res.json({errors: req.validationErrors()});
   else {
     console.log(req.body);
-    var newUser = new userModel(req.body);
-    userModel.createUser(newUser, function(err, doc) {
+    userModel.findOne({ email: req.body.email }, function(err, doc) {
       if(err) throw err;
-      console.log(doc);
-      res.json(doc);
+      if(doc) {
+        res.json({msg: "Email already exists!"});
+      } else {
+        var newUser = new userModel(req.body);
+        userModel.createUser(newUser, function(err, doc) {
+          if(err) throw err;
+          console.log(doc);
+          res.json(doc);
+        });
+      }
     });
   }
 });

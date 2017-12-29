@@ -92,6 +92,8 @@ app.controller('consoleController', function($scope, $http) {
                     res.data.errors.forEach(function(obj) {
                         $scope.alerts[obj.param] = "*" + obj.msg;
                     });
+                } else if(res.data.msg) {
+                    $scope.alerts["email"] = "*" + res.data.msg;
                 } else {
                     console.log(res.data);
                     alert("Successfully Registered!");
