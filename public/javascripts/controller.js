@@ -343,6 +343,7 @@ app.controller('blogsController', function ($http, $scope) {
 app.controller('postsController', function ($scope, $http) {
     $scope.currStars = 0;
     $scope.postIDs = [];
+    $scope.loading = true;    
     $scope.name = "John Doe";
     $scope.currentPost = [];
     $scope.newPost = true;
@@ -374,8 +375,10 @@ app.controller('postsController', function ($scope, $http) {
     };
 
     $scope.vote = function(vote) {
+        $scope.loading = true;        
         $http.post('/vote', { id: $scope.currentPost.reviews._id, vote: vote }).then(function(res) {
             console.log(res.data);
+            $scope.loading = false;            
             //$scope.displayPost($scope.currentPost);
             if(res.data.updated) {
                 
@@ -401,7 +404,8 @@ app.controller('postsController', function ($scope, $http) {
     };
 
 
-    $http.get('/posts').then(function (res) {
+    $http.get('/posts').then(function (res) {        
+        $scope.loading = false;        
         console.log(res.data);
         if(!res.data)
             location.href = "#!console";
@@ -410,6 +414,7 @@ app.controller('postsController', function ($scope, $http) {
 
 
     $scope.displayPost = function (post) {
+        $scope.loading = true;        
         if($scope.newPost) {
             $scope.newPost = false;
         }
@@ -417,6 +422,7 @@ app.controller('postsController', function ($scope, $http) {
         $scope.currentPost = post;
         $http.get('/posts/' + post._id).then(function (res) {
             console.log(res.data);
+            $scope.loading = false;            
             $scope.currentPost = res.data;
             angular.element(document.querySelector('.currentPostBody')).html($scope.currentPost.body);
             $scope.calcData();
@@ -426,32 +432,38 @@ app.controller('postsController', function ($scope, $http) {
 
 
     $scope.submitComment = function () {
+        $scope.loading = true;        
         if ($scope.commentDetails.comment === "") {
             alert("Form field empty...");
         } else {
             $http.post('/newcomment', $scope.commentDetails)
             .then(function (res) {
                 console.log(res);
+                $scope.loading = false;                
                 $scope.commentDetails.comment = "";
-                $scope.currentPost.reviews = res.data;
+                $scope.currentPost.reviews.comments = res.data.comments;
             });
         }
         
     };
 
     $scope.toggleNewPost = function() {
+        $scope.loading = true;        
         if(!$scope.newPost) {
             $scope.newPost = !$scope.newPost;
             $scope.currentPost = [];
         }
+        $scope.loading = false;        
     };
 
     $scope.submitPost = function() {
+        $scope.loading = true;        
         if(($scope.newPostContent.title === "") || ($scope.newPostContent.body === "")) {
             alert("Either form field empty!!");
         } else {
             $http.post('/newpost', $scope.newPostContent).then(function(res) {
                 console.log(res.data);
+                $scope.loading = false;                
                 location.href = "#!dashboard/blogs/posts";
             });
         }
