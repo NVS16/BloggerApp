@@ -316,7 +316,7 @@ app.controller('blogsController', function ($http, $scope) {
             $scope.loading = false;            
             location.href = "#!dashboard/blogs";
         });
-    };
+    };      
 
     $scope.viewBlog = function (id) {
         console.log(id);
