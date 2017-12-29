@@ -115,11 +115,11 @@ body {
 @media screen and (max-width: 800px) {
     
     .postTitle {
-        font-size: 1.2em;
+        font-size: 1em;
     }
     
     .postContent {
-        font-size: 1em;
+        font-size: 0.7em;
     }
     
     
@@ -141,7 +141,7 @@ body {
      }
      
      #newPostBody {
-        font-size: 1.0em;
+        font-size: 0.8em;
      }
 
      h4 {
