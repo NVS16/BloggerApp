@@ -2,11 +2,10 @@
 
 body {
     background: #eee;
-    min-width: 1200px !important;
 }
 
  .panel {
-     margin: 8% 6% 100px 6%;
+     margin: 3% !important;
      text-align: left;
  }
 
@@ -29,8 +28,9 @@ body {
     font-size: 1.3em;
     letter-spacing: 0.05em;
     line-height: 30px;
-    padding: 70px;
+    padding: 20px;
     background: white;
+    overflow-wrap: break-word;
 }
 
 .rating {
@@ -111,3 +111,51 @@ body {
 #newPostBody {
    font-size: 1.3em;
 }
+
+@media screen and (max-width: 800px) {
+    
+    .postTitle {
+        font-size: 1.2em;
+    }
+    
+    .postContent {
+        font-size: 1em;
+    }
+    
+    
+    .rating-heading {
+       font-size: 0.9em !important;
+    }
+    
+    
+    .rating-comment {
+       font-size: 0.7em;
+    }
+
+    .postViews {
+        font-size: 0.7em;
+     }
+     
+     #newPostTitle {
+        font-size: 1.2em;
+     }
+     
+     #newPostBody {
+        font-size: 1.0em;
+     }
+
+     h4 {
+         font-size: 0.8em;
+     }
+
+     .voteBtn {
+         font-size: 0.8em;
+     }
+
+     .submit {
+        font-size: 0.7em;
+        padding: 5px;
+        width: auto;
+        float: right !important;
+     }
+  }

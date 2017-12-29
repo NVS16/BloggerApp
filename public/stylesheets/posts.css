@@ -81,6 +81,7 @@ body {
      letter-spacing: 0.05em;
      line-height: 30px;
      padding: 70px;
+     overflow-wrap: break-word;
  }
 
 

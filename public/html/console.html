@@ -65,7 +65,7 @@
 </div>
 
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
@@ -84,7 +84,7 @@
                         <label>{{ alertsLogin.password }}</label>
                         <input  ng-focus="eraseAlertLogin('password')" type="password" class="form-control" placeholder="Password" ng-model="login.password">       
                     </div>
-                    <button class="btn btn-info" ng-click="Login()">LogIn</button><br>
+                    <button class="btn btn-info" ng-click="Login()">LogIn</button>
                     <span class="form-link" ><a href="#">Forgot Password?</a></span>
                 </div>
             </ul>
@@ -99,7 +99,7 @@
                     <h1>{{title}}</h1>
                 </div>-->
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="form col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="form-heading">SignUp <label>{{ alerts.success }}</label></div>
                     <div class="form-group">
