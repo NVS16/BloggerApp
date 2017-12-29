@@ -165,6 +165,7 @@ app.controller('catsController', function ($scope, $http) {
 app.controller('blogPostsController', function($http, $scope, $routeParams) {
     $scope.posts = [];
     $scope.noPosts = false;
+    $scope.loading = false;
     $scope.commentDetails = {
         comment: "",
         id: ""
@@ -220,34 +221,41 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
     }
 
         $scope.close = function() {
+            $scope.loading = true;            
             location.href = "#!dashboard/categories/" + $routeParams.cat;
         };
 
         $scope.expand = function(names) {
+            $scope.loading = true;
             var params = names.split('---');
             $http.post('/blogpostsviews',{ blog: params[0], post: params[1] })
             .then(function(res) {
                 console.log(res);
+                $scope.loading = false;
+                location.href = "#!dashboard/categories/" + $routeParams.cat + '/' + params[0] + '/' + params[1];                
             });
-            location.href = "#!dashboard/categories/" + $routeParams.cat + '/' + params[0] + '/' + params[1];
         };
 
         $scope.submitComment = function () {
+            $scope.loading = true;            
             if ($scope.commentDetails.comment === "") {
                 alert("Form field empty...");
             } else {
                 $http.post('/newcomment', $scope.commentDetails)
                 .then(function (res) {
+                    $scope.loading = false;                    
                     console.log(res);
                     $scope.commentDetails.comment = "";
-                    $scope.currentPost.reviews = res.data;
+                    $scope.currentPost.reviews.comments = res.data.comments;
                 });
             }
             
         };
     
         $scope.vote = function(vote) {
+            $scope.loading = true;            
             $http.post('/vote', { id: $scope.currentPost.reviews._id, vote: vote }).then(function(res) {
+                $scope.loading = false;
                 console.log(res.data);
                 //$scope.displayPost($scope.currentPost);
                 if(res.data.updated) {
@@ -285,6 +293,7 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
 
 app.controller('blogsController', function ($http, $scope) {
     $scope.title = "Blogs";
+    $scope.loading = true;    
     $scope.newBlog = {
         name: "",
         description: "",
@@ -292,6 +301,7 @@ app.controller('blogsController', function ($http, $scope) {
     };
 
     $http.get('/blogs').then(function (res) {
+        $scope.loading = false;        
         console.log(res);
         if(!res.data)
             location.href = "#!console";
@@ -299,20 +309,24 @@ app.controller('blogsController', function ($http, $scope) {
     });
 
     $scope.submitBlog = function () {
+        $scope.loading = true;        
         console.log("A POST request...");
         $http.post('/newblog', $scope.newBlog).then(function (res) {
             console.log(res);
+            $scope.loading = false;            
             location.href = "#!dashboard/blogs";
         });
     };
 
     $scope.viewBlog = function (id) {
         console.log(id);
+        $scope.loading = true;        
         location.href = "#!dashboard/blogs/posts";
         $http.post('/saveId', {
             id: id
         }).then(function (res) {
             console.log(res);
+            $scope.loading = false;            
         });
     };
 
