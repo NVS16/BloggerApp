@@ -165,7 +165,7 @@ app.controller('catsController', function ($scope, $http) {
 app.controller('blogPostsController', function($http, $scope, $routeParams) {
     $scope.posts = [];
     $scope.noPosts = false;
-    $scope.loading = false;
+    $scope.loading = true;
     $scope.commentDetails = {
         comment: "",
         id: ""
@@ -182,6 +182,7 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
         $scope.showCurrent = false;
         $http.get('/getblogposts/' + $routeParams.cat)
             .then(function(res) {
+                $scope.loading = false;
                 console.log(res);
                 if(res.data.length === 0) {
                     $scope.noPosts = true;
@@ -202,6 +203,7 @@ app.controller('blogPostsController', function($http, $scope, $routeParams) {
         console.log($routeParams.blog + '---' + $routeParams.post);
         $http.get('/getblogposts/' + $routeParams.cat + '/' + $routeParams.blog + '/' + $routeParams.post)
             .then(function(res) {
+                $scope.loading = false;
                 console.log(res);
                 $scope.currentPost = res.data.post;
                 $scope.commentDetails.id = $scope.currentPost.reviews._id;
@@ -309,13 +311,18 @@ app.controller('blogsController', function ($http, $scope) {
     });
 
     $scope.submitBlog = function () {
-        $scope.loading = true;        
-        console.log("A POST request...");
-        $http.post('/newblog', $scope.newBlog).then(function (res) {
-            console.log(res);
-            $scope.loading = false;            
-            location.href = "#!dashboard/blogs";
-        });
+        $scope.loading = true;      
+        if(($scope.newBlog.name === "") || ($scope.newBlog.description === "")) {
+            alert("Either form field empty!!");
+            $scope.loading = false;  
+        }  else {
+            console.log("A POST request...");
+            $http.post('/newblog', $scope.newBlog).then(function (res) {
+                console.log(res);
+                $scope.loading = false;            
+                location.href = "#!dashboard/blogs";
+            });
+         }
     };      
 
     $scope.viewBlog = function (id) {
